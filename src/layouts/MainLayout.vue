@@ -7,17 +7,8 @@
       </div>
 
       <nav class="sidebar-nav">
-        <router-link to="/" class="nav-item">
-          <span class="icon">🏠</span>
-          <span>홈</span>
-        </router-link>
-        <router-link to="/users" class="nav-item">
-          <span class="icon">👥</span>
-          <span>회원 관리</span>
-        </router-link>
-        <router-link to="/menu" class="nav-item">
-          <span class="icon">📋</span>
-          <span>메뉴 관리</span>
+        <router-link v-for="menu in menuList" :key="menu.menuCode" :to="menu.url" class="nav-item">
+          {{ menu.icon }} {{ menu.menuName }}
         </router-link>
       </nav>
 
