@@ -21,16 +21,24 @@ const router = createRouter({
           name: 'home',
           component: () => import('@/views/HomeView.vue'),
         },
-        // {
-        //   path: 'users',
-        //   name: 'users',
-        //   component: () => import('@/views/Users.vue'),
-        // },
-        // {
-        //   path: 'menu',
-        //   name: 'menu',
-        //   component: () => import('@/views/MenuManage.vue'),
-        // },
+        // 유저 관리 (단일 화면 CRUD)
+        {
+          path: 'admin/users',
+          name: 'userList',
+          component: () => import('@/views/admin/UserListView.vue'),
+        },
+        // 메뉴 관리 (단일 화면 CRUD)
+        {
+          path: 'admin/menus',
+          name: 'menuList',
+          component: () => import('@/views/admin/MenuListView.vue'),
+        },
+        // 권한 관리 (단일 화면 CRUD)
+        {
+          path: 'admin/roles',
+          name: 'roleList',
+          component: () => import('@/views/admin/RoleListView.vue'),
+        },
       ],
     },
   ],

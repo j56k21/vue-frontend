@@ -2,7 +2,7 @@
   <div class="login-container">
     <div class="login-box">
       <div class="login-header">
-        <h1>Admin 시스템</h1>
+        <h1>임시 ERP</h1>
         <p>관리자 로그인</p>
       </div>
 
