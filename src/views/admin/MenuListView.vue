@@ -61,8 +61,11 @@
             <div class="form-group">
               <label>뎁스</label>
               <select v-model="form.depth" class="form-input">
-                <option :value="0">0 (최상위)</option>
-                <option :value="1">1 (하위)</option>
+                <option v-if="depthOptions.length === 0" :value="0">0 (최상위)</option>
+                <option v-if="depthOptions.length === 0" :value="1">1 (하위)</option>
+                <option v-for="item in depthOptions" :key="item.codeValue" :value="Number(item.codeValue)">
+                  {{ item.codeName }}
+                </option>
               </select>
             </div>
             <div class="form-group">
@@ -135,6 +138,10 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import api from '@/api/axios'
+import { useCommonCodeStore } from '@/stores/commonCode'
+
+const commonCodeStore = useCommonCodeStore()
+const depthOptions = ref([])
 
 const menuGroups = ref([])
 const roleOptions = ref([])
@@ -245,5 +252,8 @@ const doDelete = async () => {
 onMounted(() => {
   fetchMenus()
   fetchRoles()
+  commonCodeStore.fetchGroup('MENU_DEPTH').then(() => {
+    depthOptions.value = commonCodeStore.getItems('MENU_DEPTH')
+  })
 })
 </script>

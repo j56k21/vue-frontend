@@ -634,3 +634,84 @@
   color: #999;
   cursor: not-allowed;
 }
+
+/* === 공통코드 관리 화면 === */
+.common-code-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.code-group-panel,
+.code-item-panel {
+  padding: 0;
+  overflow: hidden;
+}
+
+.panel-title {
+  padding: 0.875rem 1.25rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #2c3e50;
+  background: #f8f9fa;
+  border-bottom: 1px solid #eee;
+}
+
+.panel-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.25rem;
+  background: #f8f9fa;
+  border-bottom: 1px solid #eee;
+}
+
+.panel-title-row .panel-title {
+  padding: 0;
+  background: none;
+  border: none;
+}
+
+.code-group-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.25rem;
+  border-bottom: 1px solid #f0f0f0;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.code-group-item:last-child {
+  border-bottom: none;
+}
+
+.code-group-item:hover {
+  background-color: #f8f9fa;
+}
+
+.code-group-item.active {
+  background-color: #e8f4fd;
+  border-left: 3px solid #3498db;
+}
+
+.group-name {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.group-code-text {
+  font-size: 0.75rem;
+  color: #7f8c8d;
+  font-family: monospace;
+  margin-top: 2px;
+}
+
+.group-actions {
+  display: flex;
+  gap: 0.375rem;
+  flex-shrink: 0;
+  margin-left: 0.5rem;
+}

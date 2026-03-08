@@ -9,19 +9,16 @@
     <div class="card filter-card">
       <div class="filter-row">
         <div class="filter-group">
-          <label>사용자 ID</label>
-          <input v-model="filter.userId" type="text" class="form-input" placeholder="사용자 ID" />
+          <label>사용자명</label>
+          <input v-model="filter.username" type="text" class="form-input" placeholder="사용자명" />
         </div>
         <div class="filter-group">
           <label>행위 유형</label>
           <select v-model="filter.actionType" class="form-input">
             <option value="">전체</option>
-            <option value="LOGIN">로그인</option>
-            <option value="LOGOUT">로그아웃</option>
-            <option value="VIEW">메뉴 조회</option>
-            <option value="CREATE">추가</option>
-            <option value="UPDATE">수정</option>
-            <option value="DELETE">삭제</option>
+            <option v-for="item in actionTypeOptions" :key="item.codeValue" :value="item.codeValue">
+              {{ item.codeName }}
+            </option>
           </select>
         </div>
         <div class="filter-group">
@@ -83,6 +80,10 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import api from '@/api/axios'
+import { useCommonCodeStore } from '@/stores/commonCode'
+
+const commonCodeStore = useCommonCodeStore()
+const actionTypeOptions = ref([])
 
 const logs = ref([])
 const loading = ref(false)
@@ -93,7 +94,7 @@ const PAGE_SIZE = 20
 const today = new Date().toISOString().slice(0, 10)
 
 const filter = ref({
-  userId: '',
+  username: '',
   actionType: '',
   fromDate: today,
   toDate: today,
@@ -108,7 +109,7 @@ const fetchLogs = async () => {
       fromDate: filter.value.fromDate,
       toDate: filter.value.toDate,
     }
-    if (filter.value.userId) params.userId = filter.value.userId
+    if (filter.value.username) params.username = filter.value.username
     if (filter.value.actionType) params.actionType = filter.value.actionType
 
     const res = await api.get('/activity-logs', { params })
@@ -128,14 +129,14 @@ const changePage = (p) => {
 }
 
 const resetFilter = () => {
-  filter.value = { userId: '', actionType: '', fromDate: today, toDate: today }
+  filter.value = { username: '', actionType: '', fromDate: today, toDate: today }
   page.value = 0
   fetchLogs()
 }
 
 const actionLabel = (type) => {
-  const map = { LOGIN: '로그인', LOGOUT: '로그아웃', VIEW: '조회', CREATE: '추가', UPDATE: '수정', DELETE: '삭제' }
-  return map[type] ?? type
+  const found = actionTypeOptions.value.find((i) => i.codeValue === type)
+  return found ? found.codeName : type
 }
 
 const actionBadgeClass = (type) => {
@@ -155,5 +156,9 @@ const formatDateTime = (d) => {
   return new Date(d).toLocaleString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' })
 }
 
-onMounted(fetchLogs)
+onMounted(async () => {
+  await commonCodeStore.fetchGroup('ACTION_TYPE')
+  actionTypeOptions.value = commonCodeStore.getItems('ACTION_TYPE')
+  fetchLogs()
+})
 </script>

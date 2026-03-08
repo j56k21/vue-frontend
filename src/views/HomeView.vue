@@ -2,7 +2,7 @@
   <div class="home">
     <div class="welcome-card">
       <h2>환영합니다, {{ authStore.user?.username }}님!</h2>
-      <p>Admin 관리 시스템에 오신 것을 환영합니다.</p>
+      <p>임시 ERP에 오신 것을 환영합니다.</p>
     </div>
 
     <div class="stats-grid">

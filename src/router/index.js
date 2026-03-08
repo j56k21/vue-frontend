@@ -1,6 +1,7 @@
 // src/router/index.js
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
+import api from '@/api/axios'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -19,7 +20,7 @@ const router = createRouter({
         {
           path: '',
           name: 'home',
-          component: () => import('@/views/HomeView.vue'),
+          component: () => import('@/views/DashboardView.vue'),
         },
         // 유저 관리 (단일 화면 CRUD)
         {
@@ -39,6 +40,24 @@ const router = createRouter({
           name: 'roleList',
           component: () => import('@/views/admin/RoleListView.vue'),
         },
+        // 공통코드 관리
+        {
+          path: 'admin/common-codes',
+          name: 'commonCodes',
+          component: () => import('@/views/admin/CommonCodeView.vue'),
+        },
+        // 행위 이력 조회
+        {
+          path: 'admin/activity-logs',
+          name: 'activityLogs',
+          component: () => import('@/views/admin/ActivityLogView.vue'),
+        },
+        // 권한별 메뉴 설정
+        {
+          path: 'admin/menu-roles',
+          name: 'menuRoles',
+          component: () => import('@/views/admin/MenuRoleView.vue'),
+        },
       ],
     },
   ],
@@ -55,6 +74,22 @@ router.beforeEach((to, from, next) => {
     next('/')
   } else {
     next()
+  }
+})
+
+// 메뉴 이동 이력 기록 (VIEW 액션)
+router.afterEach((to) => {
+  const authStore = useAuthStore()
+  if (authStore.isAuthenticated() && to.path !== '/login') {
+    const username = authStore.user?.username
+    if (username) {
+      api.post('/activity-logs', {
+        username,
+        actionType: 'VIEW',
+        targetResource: 'PAGE:' + to.path,
+        description: '페이지 이동: ' + to.path,
+      }).catch(() => {})
+    }
   }
 })
 

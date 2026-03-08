@@ -88,8 +88,10 @@
           <div class="form-group" v-if="isEdit">
             <label>상태</label>
             <select v-model="form.isEnabled" class="form-input">
-              <option :value="true">활성</option>
-              <option :value="false">비활성</option>
+              <option v-if="userStatusOptions.length === 0" :value="true">활성</option>
+              <option v-if="userStatusOptions.length === 0" :value="false">비활성</option>
+              <option v-for="item in userStatusOptions" :key="item.codeValue"
+                :value="item.codeValue === 'ACTIVE'">{{ item.codeName }}</option>
             </select>
           </div>
 
@@ -130,6 +132,10 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import api from '@/api/axios'
+import { useCommonCodeStore } from '@/stores/commonCode'
+
+const commonCodeStore = useCommonCodeStore()
+const userStatusOptions = ref([])
 
 const users = ref([])
 const roleOptions = ref([])
@@ -256,5 +262,8 @@ const doDelete = async () => {
 onMounted(() => {
   fetchUsers()
   fetchRoles()
+  commonCodeStore.fetchGroup('USER_STATUS').then(() => {
+    userStatusOptions.value = commonCodeStore.getItems('USER_STATUS')
+  })
 })
 </script>
